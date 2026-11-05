@@ -2,7 +2,6 @@
 # detect.sh - decrypts a Vigenere encrypted web log and looks for attacks
 #
 # usage:  ./detect.sh access.log.enc [key]
-# key is optional, MAYDAY is used if you don't give one
 # set VERBOSE=1 to also see first/last time of each attack
 #
 # exit code: 1 = attack found, 0 = nothing found, 2 = bad usage

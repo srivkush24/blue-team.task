@@ -1,0 +1,40 @@
+BLUE TEAM INVESTIGATION FINDINGS
+
+1. Brute Force Attack
+Attacker IP: 203.0.113.42
+First Attempt: 15/Mar/2024:08:45:00 +0000
+Last Attempt: 15/Mar/2024:08:45:33 +0000
+Total Attempts: 12
+
+(three more IPs also had 5 or more 401 responses:
+ 100.64.8.9 - 7 attempts, 15/Mar/2024:10:40:00 to 11:40:00
+ 141.98.10.33 - 6 attempts, 15/Mar/2024:12:00:00 to 12:00:20
+ 198.51.100.77 - 5 attempts, 15/Mar/2024:10:00:00 to 10:01:20)
+
+2. SQL Injection
+Attacker IP: 51.77.72.9
+First Attempt: 15/Mar/2024:09:10:05 +0000
+Last Attempt: 15/Mar/2024:09:15:05 +0000
+Total Attempts: 6
+
+(two more IPs also sent SQL injection requests:
+ 185.220.101.5 - 2 attempts, 15/Mar/2024:11:20:00 to 11:21:00
+ 141.98.10.33 - 2 attempts, 15/Mar/2024:12:02:00 to 12:04:00)
+
+3. Directory Traversal
+Attacker IP: 88.198.50.20
+First Attempt: 15/Mar/2024:09:40:00 +0000
+Last Attempt: 15/Mar/2024:09:40:42 +0000
+Total Attempts: 7
+
+(two more IPs also used ../ in requests:
+ 45.33.32.156 - 3 attempts, 15/Mar/2024:11:30:00 to 11:32:00
+ 141.98.10.33 - 1 attempt, 15/Mar/2024:12:03:00)
+
+Notes
+- The main attacker in each section is the IP with the most matching requests.
+- 141.98.10.33 shows up in all three attacks between 12:00 and 12:04, right at the
+  end of the log.
+- 192.0.2.15 only had 4 failed logins, so it is under the limit of 5 and not counted.
+- 77.88.55.60 sent one traversal request written in URL-encoded form (%2e%2e%2f) at
+  09:35:00. It does not contain a plain "../" so the rule does not count it.

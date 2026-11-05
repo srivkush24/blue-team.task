@@ -1,0 +1,50 @@
+INCIDENT REPORT - WEB SERVER LOG ANALYSIS
+
+Log: access.log (2614 requests, 15 March 2024, from 08:00 to 12:04)
+
+1. Executive Summary
+
+The server log for 15 March 2024 shows three kinds of attack: brute-force login
+attempts, SQL injection and directory traversal. The brute-force attempts went
+after the login pages (/login, /admin/login, /api/login and /wp-login.php). The SQL
+injection requests went after the search, products, login and api/items pages,
+which use the database. The directory traversal requests went after the file pages
+(/download, /files, /img, /view) and tried to read files like /etc/passwd,
+/etc/shadow and .env. The biggest attackers were 203.0.113.42 (12 failed logins),
+51.77.72.9 (6 SQL injection requests) and 88.198.50.20 (7 traversal requests).
+Other IPs also matched the rules, and 141.98.10.33 used all three attacks within
+four minutes. I rate the incident as HIGH. Most of the bad requests were refused
+with 400, 403 or 404, but some got 200 or 500 replies. Also, 203.0.113.42 logged in
+successfully at 08:46:00 right after its failed attempts, so that account may have
+been taken over.
+
+2. Attack Summary
+
+Attack Type,Attacker IP,First Seen,Last Seen,Attempts
+Brute Force,203.0.113.42,15/Mar/2024:08:45:00,15/Mar/2024:08:45:33,12
+Brute Force,100.64.8.9,15/Mar/2024:10:40:00,15/Mar/2024:11:40:00,7
+Brute Force,141.98.10.33,15/Mar/2024:12:00:00,15/Mar/2024:12:00:20,6
+Brute Force,198.51.100.77,15/Mar/2024:10:00:00,15/Mar/2024:10:01:20,5
+SQL Injection,51.77.72.9,15/Mar/2024:09:10:05,15/Mar/2024:09:15:05,6
+SQL Injection,185.220.101.5,15/Mar/2024:11:20:00,15/Mar/2024:11:21:00,2
+SQL Injection,141.98.10.33,15/Mar/2024:12:02:00,15/Mar/2024:12:04:00,2
+Directory Traversal,88.198.50.20,15/Mar/2024:09:40:00,15/Mar/2024:09:40:42,7
+Directory Traversal,45.33.32.156,15/Mar/2024:11:30:00,15/Mar/2024:11:32:00,3
+Directory Traversal,141.98.10.33,15/Mar/2024:12:03:00,15/Mar/2024:12:03:00,1
+
+(all times are +0000)
+
+3. Recommended Actions
+
+Brute Force: limit how many login attempts one IP can make, lock the account for a
+while after too many failures, turn on two-factor login, and block the attacking
+IPs. Reset the password of the account that 203.0.113.42 logged into at 08:46:00.
+
+SQL Injection: use prepared statements (parameterized queries) instead of putting
+user input into SQL text, check all input, and add a web application firewall rule
+for these patterns. Look at the requests that got 200 or 500 replies to make sure
+no data was leaked or changed.
+
+Directory Traversal: clean up and check every file path before opening it, only
+allow files inside one approved folder, reject paths with "../", and run the web
+server with as few file permissions as possible.
